@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const middleware = require('./middleware.js');
 
 app.use(bodyParser.json())
 
@@ -50,5 +51,17 @@ app.post('/login',function(req,res){
     }
 
 })
+
+// admin route is protected by checking token in middleware
+app.get('/admin',middleware.checkToken,function(req,res){
+
+	res.json({
+		success:true,
+		message:'admin authorized',
+		adminData: 'secure data from database'
+	})
+
+})
+
 
 app.listen(8000,function(){console.log('server is listening')})
